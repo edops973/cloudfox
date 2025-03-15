@@ -1630,9 +1630,10 @@ func runResourceTrustsCommandWithProfile(cmd *cobra.Command, args []string, prof
 		return
 	}
 	m := aws.ResourceTrustsModule{
-		KMSClient:          &KMSClient,
-		APIGatewayClient:   &APIGatewayClient,
-		EC2Client:          &EC2Client,
+		KMSClient:        &KMSClient,
+		APIGatewayClient: &APIGatewayClient,
+		EC2Client:        &EC2Client,
+
 		Caller:             *caller,
 		AWSProfileProvided: profile,
 		Goroutines:         Goroutines,
