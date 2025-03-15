@@ -197,6 +197,9 @@ func TestVpcEndpointResourceTrusts(t *testing.T) {
 			if expectedResource2.ARN != tc.testModule.Resources2[index].ARN {
 				t.Fatal("Resource ARN does not match expected value")
 			}
+			if expectedResource2.Public != tc.testModule.Resources2[index].Public {
+				t.Fatal("Resource Public does not match expected value")
+			}
 		}
 	}
 }
