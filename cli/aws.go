@@ -1624,6 +1624,7 @@ func runResourceTrustsCommandWithProfile(cmd *cobra.Command, args []string, prof
 	caller, err := internal.AWSWhoami(profile, cmd.Root().Version, AWSMFAToken)
 	var KMSClient sdk.KMSClientInterface = kms.NewFromConfig(AWSConfig)
 	var APIGatewayClient sdk.APIGatewayClientInterface = apigateway.NewFromConfig(AWSConfig)
+	var EC2Client sdk.AWSEC2ClientInterface = ec2.NewFromConfig(AWSConfig)
 
 	if err != nil {
 		return
@@ -1631,6 +1632,7 @@ func runResourceTrustsCommandWithProfile(cmd *cobra.Command, args []string, prof
 	m := aws.ResourceTrustsModule{
 		KMSClient:          &KMSClient,
 		APIGatewayClient:   &APIGatewayClient,
+		EC2Client:          &EC2Client,
 		Caller:             *caller,
 		AWSProfileProvided: profile,
 		Goroutines:         Goroutines,
