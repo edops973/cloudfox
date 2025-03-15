@@ -77,11 +77,11 @@ func (m *ResourceTrustsModule) PrintResources(outputDirectory string, verbosity 
 	fmt.Printf("[%s][%s] Enumerating Resources with resource policies for account %s.\n", cyan(m.output.CallingModule), cyan(m.AWSProfileStub), aws.ToString(m.Caller.Account))
 	// if kms feature flag is enabled include kms in the supported services
 	if includeKms {
-		fmt.Printf("[%s][%s] Supported Services: APIGateway, CodeBuild, ECR, EFS, Glue, KMS, Lambda, SecretsManager, S3, SNS, SQS\n",
+		fmt.Printf("[%s][%s] Supported Services: APIGateway, CodeBuild, ECR, EFS, Glue, KMS, Lambda, SecretsManager, S3, SNS, SQS, VpcEndpoint\n",
 			cyan(m.output.CallingModule), cyan(m.AWSProfileStub))
 	} else {
 		fmt.Printf("[%s][%s] Supported Services: APIGateway, CodeBuild, ECR, EFS, Glue, Lambda, SecretsManager, S3, SNS, "+
-			"SQS (KMS requires --include-kms feature flag)\n",
+			"SQS (KMS requires --include-kms feature flag), VpcEndpoint\n",
 			cyan(m.output.CallingModule), cyan(m.AWSProfileStub))
 	}
 	wg := new(sync.WaitGroup)
