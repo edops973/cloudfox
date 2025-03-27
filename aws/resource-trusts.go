@@ -968,16 +968,14 @@ func (m *ResourceTrustsModule) getAPIGatewayPoliciesPerRegion(r string, wg *sync
 	}
 
 	for _, restAPI := range restAPIs {
-		var isPublic string
-		var statementSummaryInEnglish string
-		var isInteresting = "No"
 
 		if sdk.IsPublicApiGateway(&restAPI) {
-			isPublic = magenta("Yes")
-			isInteresting = magenta("Yes")
-		} else {
-			isPublic = "No"
+			continue
 		}
+
+		var isPublic = "No"
+		var statementSummaryInEnglish string
+		var isInteresting = "No"
 
 		if restAPI.Policy != nil && *restAPI.Policy != "" {
 
