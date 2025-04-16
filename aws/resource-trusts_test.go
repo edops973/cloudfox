@@ -1,10 +1,11 @@
 package aws
 
 import (
+	"testing"
+
 	"github.com/BishopFox/cloudfox/aws/sdk"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"testing"
 )
 
 func TestIsResourcePolicyInteresting(t *testing.T) {
@@ -188,7 +189,7 @@ func TestVpcEndpointResourceTrusts(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc.testModule.PrintResources(tc.outputDirectory, tc.verbosity)
+		tc.testModule.PrintResources(tc.outputDirectory, tc.verbosity, false)
 		for index, expectedResource2 := range tc.expectedResult {
 			if expectedResource2.Name != tc.testModule.Resources2[index].Name {
 				t.Fatal("Resource name does not match expected value")

@@ -1089,7 +1089,7 @@ func (m *ResourceTrustsModule) getVPCEndpointPoliciesPerRegion(r string, wg *syn
 
 					dataReceiver <- Resource2{
 						AccountID:             aws.ToString(m.Caller.Account),
-						ARN:                   aws.ToString(vpcEndpoint.VpcEndpointId),
+						ARN:                   fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-endpoint/%s", r, aws.ToString(m.Caller.Account), aws.ToString(vpcEndpoint.VpcEndpointId)),
 						ResourcePolicySummary: statementSummaryInEnglish,
 						Public:                isPublic,
 						Name:                  aws.ToString(vpcEndpoint.VpcEndpointId),
@@ -1101,7 +1101,7 @@ func (m *ResourceTrustsModule) getVPCEndpointPoliciesPerRegion(r string, wg *syn
 		} else {
 			dataReceiver <- Resource2{
 				AccountID:             aws.ToString(m.Caller.Account),
-				ARN:                   aws.ToString(vpcEndpoint.VpcEndpointId),
+				ARN:                   fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-endpoint/%s", r, aws.ToString(m.Caller.Account), aws.ToString(vpcEndpoint.VpcEndpointId)),
 				ResourcePolicySummary: statementSummaryInEnglish,
 				Public:                isPublic,
 				Name:                  aws.ToString(vpcEndpoint.VpcEndpointId),
