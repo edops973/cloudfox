@@ -1,10 +1,11 @@
 package aws
 
 import (
+	"testing"
+
 	"github.com/BishopFox/cloudfox/aws/sdk"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"testing"
 )
 
 func TestIsResourcePolicyInteresting(t *testing.T) {
@@ -119,14 +120,10 @@ func TestAPIGatewayResourceTrusts(t *testing.T) {
 			},
 			expectedResult: []Resource2{
 				{
-					Name:   "api1",
-					ARN:    "arn:aws:execute-api:us-west-2:123456789012:abcdefg/*",
-					Public: "No",
-				},
-				{
-					Name:   "api2",
-					ARN:    "arn:aws:execute-api:us-west-2:123456789012:qwerty/*",
-					Public: "Yes",
+					Name:        "api1",
+					ARN:         "arn:aws:execute-api:us-west-2:123456789012:abcdefg/*",
+					Public:      "No",
+					Interesting: "Yes",
 				},
 			},
 		},
@@ -143,6 +140,9 @@ func TestAPIGatewayResourceTrusts(t *testing.T) {
 			}
 			if expectedResource2.Public != tc.testModule.Resources2[index].Public {
 				t.Fatal("Resource Public does not match expected value")
+			}
+			if expectedResource2.Interesting != tc.testModule.Resources2[index].Interesting {
+				t.Fatal("Resource Interesting does not match expected value")
 			}
 		}
 	}

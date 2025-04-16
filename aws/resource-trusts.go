@@ -83,7 +83,7 @@ func (m *ResourceTrustsModule) PrintResources(outputDirectory string, verbosity 
 			cyan(m.output.CallingModule), cyan(m.AWSProfileStub))
 	} else {
 		fmt.Printf("[%s][%s] Supported Services: APIGateway, CodeBuild, ECR, EFS, Glue, Lambda, Opensearch, SecretsManager, S3, SNS, "+
-			"SQS (KMS requires --include-kms feature flag), VpcEndpoint\n",
+			"SQS, VpcEndpoint (KMS requires --include-kms feature flag)\n",
 			cyan(m.output.CallingModule), cyan(m.AWSProfileStub))
 	}
 	wg := new(sync.WaitGroup)
@@ -994,16 +994,14 @@ func (m *ResourceTrustsModule) getAPIGatewayPoliciesPerRegion(r string, wg *sync
 	}
 
 	for _, restAPI := range restAPIs {
-		var isPublic string
-		var statementSummaryInEnglish string
-		var isInteresting = "No"
 
 		if sdk.IsPublicApiGateway(&restAPI) {
-			isPublic = magenta("Yes")
-			isInteresting = magenta("Yes")
-		} else {
-			isPublic = "No"
+			continue
 		}
+
+		var isPublic = "No"
+		var statementSummaryInEnglish string
+		var isInteresting = "No"
 
 		if restAPI.Policy != nil && *restAPI.Policy != "" {
 
@@ -1105,7 +1103,7 @@ func (m *ResourceTrustsModule) getVPCEndpointPoliciesPerRegion(r string, wg *syn
 
 					dataReceiver <- Resource2{
 						AccountID:             aws.ToString(m.Caller.Account),
-						ARN:                   aws.ToString(vpcEndpoint.VpcEndpointId),
+						ARN:                   fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-endpoint/%s", r, aws.ToString(m.Caller.Account), aws.ToString(vpcEndpoint.VpcEndpointId)),
 						ResourcePolicySummary: statementSummaryInEnglish,
 						Public:                isPublic,
 						Name:                  aws.ToString(vpcEndpoint.VpcEndpointId),
@@ -1117,7 +1115,7 @@ func (m *ResourceTrustsModule) getVPCEndpointPoliciesPerRegion(r string, wg *syn
 		} else {
 			dataReceiver <- Resource2{
 				AccountID:             aws.ToString(m.Caller.Account),
-				ARN:                   aws.ToString(vpcEndpoint.VpcEndpointId),
+				ARN:                   fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-endpoint/%s", r, aws.ToString(m.Caller.Account), aws.ToString(vpcEndpoint.VpcEndpointId)),
 				ResourcePolicySummary: statementSummaryInEnglish,
 				Public:                isPublic,
 				Name:                  aws.ToString(vpcEndpoint.VpcEndpointId),
