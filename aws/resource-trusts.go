@@ -82,7 +82,7 @@ func (m *ResourceTrustsModule) PrintResources(outputDirectory string, verbosity 
 			cyan(m.output.CallingModule), cyan(m.AWSProfileStub))
 	} else {
 		fmt.Printf("[%s][%s] Supported Services: APIGateway, CodeBuild, ECR, EFS, Glue, Lambda, SecretsManager, S3, SNS, "+
-			"SQS (KMS requires --include-kms feature flag), VpcEndpoint\n",
+			"SQS, VpcEndpoint (KMS requires --include-kms feature flag)\n",
 			cyan(m.output.CallingModule), cyan(m.AWSProfileStub))
 	}
 	wg := new(sync.WaitGroup)
