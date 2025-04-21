@@ -4,10 +4,11 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/aws/aws-sdk-go-v2/service/kms"
 
 	"github.com/BishopFox/cloudfox/aws"
 	"github.com/BishopFox/cloudfox/aws/sdk"
