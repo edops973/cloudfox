@@ -4,10 +4,11 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/aws/aws-sdk-go-v2/service/kms"
 
 	"github.com/BishopFox/cloudfox/aws"
 	"github.com/BishopFox/cloudfox/aws/sdk"
@@ -569,7 +570,7 @@ func awsPreRun(cmd *cobra.Command, args []string) {
 			cacheDirectory := filepath.Join(AWSOutputDirectory, "cached-data", "aws", ptr.ToString(caller.Account))
 			err = internal.LoadCacheFromGobFiles(cacheDirectory)
 			if err != nil {
-				if err == internal.ErrDirectoryDoesNotExist {
+				if errors.Is(err, internal.ErrDirectoryDoesNotExist) {
 					fmt.Printf("[%s][%s] No cache directory for %s. Skipping loading cached data.\n", cyan(emoji.Sprintf(":fox:cloudfox v%s :fox:", cmd.Root().Version)), cyan(profile), ptr.ToString(caller.Account))
 				} else {
 					fmt.Printf("[%s][%s] No cache data for %s. Error: %v\n", cyan(emoji.Sprintf(":fox:cloudfox v%s :fox:", cmd.Root().Version)), cyan(profile), ptr.ToString(caller.Account), err)
@@ -921,7 +922,6 @@ func runEnvsCommand(cmd *cobra.Command, args []string) {
 			continue
 		}
 		m := aws.EnvsModule{
-
 			Caller:        *caller,
 			AWSRegions:    internal.GetEnabledRegions(profile, cmd.Root().Version, AWSMFAToken),
 			AWSProfile:    profile,
@@ -1201,7 +1201,7 @@ func runCapeCommand(cmd *cobra.Command, args []string) {
 			graph.EdgeAttribute(edge.ShortReason, edge.Reason),
 		)
 		if err != nil {
-			if err == graph.ErrEdgeAlreadyExists {
+			if errors.Is(err, graph.ErrEdgeAlreadyExists) {
 				// update theedge by copying the existing graph.Edge with attributes and add the new attributes
 				//fmt.Println("Edge already exists")
 
@@ -1625,14 +1625,17 @@ func runResourceTrustsCommandWithProfile(cmd *cobra.Command, args []string, prof
 	var KMSClient sdk.KMSClientInterface = kms.NewFromConfig(AWSConfig)
 	var APIGatewayClient sdk.APIGatewayClientInterface = apigateway.NewFromConfig(AWSConfig)
 	var EC2Client sdk.AWSEC2ClientInterface = ec2.NewFromConfig(AWSConfig)
+	var OpenSearchClient sdk.OpenSearchClientInterface = opensearch.NewFromConfig(AWSConfig)
 
 	if err != nil {
 		return
 	}
 	m := aws.ResourceTrustsModule{
-		KMSClient:          &KMSClient,
-		APIGatewayClient:   &APIGatewayClient,
-		EC2Client:          &EC2Client,
+		KMSClient:        &KMSClient,
+		APIGatewayClient: &APIGatewayClient,
+		EC2Client:        &EC2Client,
+		OpenSearchClient: &OpenSearchClient,
+
 		Caller:             *caller,
 		AWSProfileProvided: profile,
 		Goroutines:         Goroutines,
